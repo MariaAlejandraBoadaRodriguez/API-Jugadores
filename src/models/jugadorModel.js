@@ -1,19 +1,19 @@
 const db = require('../config/dbconfig.js');
 
-class Jugador{
+class Jugador {
     getJugadores(callback) {
-        const sql = "SELECT id, nombre, edad, nacionalidad, equipo, posicion, goles, asistencias, altura, peso, titulos, valor, imagen FROM jugadores";
+        const sql = "SELECT id, name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc FROM jugadores";
         db.query(sql, callback);
     }
 
     getJugadoresById(id, callback) {
-        const sql = "SELECT id, nombre, edad, nacionalidad, equipo, posicion, goles, asistencias, altura, peso, titulos, valor, imagen FROM jugadores WHERE id = ?";
+        const sql = "SELECT id, name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc FROM jugadores WHERE id = ?";
         db.query(sql, [id], callback);
     }
 
-    postJugadores(nombre, edad, nacionalidad, equipo, posicion, goles, asistencias, altura, peso, titulos, valor, imagen, callback) {
-        const sql = 'INSERT INTO jugadores(nombre, edad, nacionalidad, equipo, posicion, goles, asistencias, altura, peso, titulos, valor, imagen) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        db.query(sql, [nombre, edad, nacionalidad, equipo, posicion, goles, asistencias, altura, peso, titulos, valor, imagen], (err, result) => {
+    postJugadores(name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc, callback) {
+        const sql = 'INSERT INTO jugadores(name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        db.query(sql, [name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc], (err, result) => {
             if (err) {
                 return callback(err, null);
             }
@@ -21,9 +21,9 @@ class Jugador{
         });
     }
 
-    putJugadores(id, nombre, edad, nacionalidad, equipo, posicion, goles, asistencias, altura, peso, titulos, valor, imagen, callback) {
-        const sql = 'UPDATE jugadores SET nombre = ?, edad = ?, nacionalidad = ?, equipo = ?, posicion = ?, goles = ?, asistencias = ?, altura = ?, peso = ?, titulos = ?, valor = ?, imagen = ? WHERE id = ?';
-        db.query(sql, [nombre, edad, nacionalidad, equipo, posicion, goles, asistencias, altura, peso, titulos, valor, imagen, id], callback);
+    putJugadores(id, name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc, callback) {
+        const sql = 'UPDATE jugadores SET name = ?, age = ?, nationality = ?, club = ?, position = ?, goals_2024 = ?, assists = ?, height = ?, weight = ?, titles_won = ?, market_value = ?, imgSrc = ? WHERE id = ?';
+        db.query(sql, [name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc, id], callback);
     }
 
     deleteJugadores(id, callback) {
@@ -32,4 +32,4 @@ class Jugador{
     }
 }
 
-module.exports=new Jugador()
+module.exports = new Jugador();
