@@ -5,19 +5,27 @@ const upload = multer({ storage: storage });
 
 module.exports = {
     getJugadores: (req, res) => {
-        jugadorModel.getJugadores((err, result) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            const jugadoresConImagenBase64 = result.map(jugador => {
-                if (jugador.imgSrc) {
-                    jugador.imgSrc = jugador.imgSrc.toString('base64'); // Convierte el buffer binario en base64
+        const clubId = req.query.club_id;
+
+        if (clubId) {
+            // Filtra jugadores por club_id
+            jugadorModel.getJugadoresByClubId(clubId, (err, result) => {
+                if (err) {
+                    res.status(500).json({ error: err.message });
+                    return;
                 }
-                return jugador;
+                res.status(200).json({ data: result });
             });
-            res.status(200).json({ data: jugadoresConImagenBase64 });
-        });
+        } else {
+            // Devuelve todos los jugadores
+            jugadorModel.getJugadores((err, result) => {
+                if (err) {
+                    res.status(500).json({ error: err.message });
+                    return;
+                }
+                res.status(200).json({ data: result });
+            });
+        }
     },
 
     getJugadoresById: (req, res) => {
@@ -40,10 +48,10 @@ module.exports = {
     },
 
     postJugadores: (req, res) => {
-        const { name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value } = req.body;
+        const { name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, type, star_year, club_id} = req.body;
         const imgSrc = req.file ? req.file.buffer : null;
 
-        jugadorModel.postJugadores(name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc, (err, result) => {
+        jugadorModel.postJugadores(name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc, type, star_year, club_id, (err, result) => {
             if (err) {
                 res.status(500).json({ error: err.message });
                 return;
@@ -54,10 +62,10 @@ module.exports = {
 
     putJugadores: (req, res) => {
         const { id } = req.params;
-        const { name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value } = req.body;
+        const { name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, type, star_year, club_id } = req.body;
         const imgSrc = req.file ? req.file.buffer : null;
 
-        jugadorModel.putJugadores(id, name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc, (err, result) => {
+        jugadorModel.putJugadores(id, name, age, nationality, club, position, goals_2024, assists, height, weight, titles_won, market_value, imgSrc, type, star_year, club_id, (err, result) => {
             if (err) {
                 res.status(500).json({ error: err.message });
                 return;
